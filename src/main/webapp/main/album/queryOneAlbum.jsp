@@ -8,9 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript">
     $(function(){
+        console.log(groubQueryOne)
         var d = $("#queryAlbumTreegrid").treegrid("getParent",groubQueryOne);
-        $("#myImg").prop("src","${pageContext.request.contextPath}/"+d.coverImg);
-        $("#myDescription").text(d.description);
+        console.log(d);
+       // $("#myImg").prop("src","${pageContext.request.contextPath}/"+d.coverImg);
+        //$("#myDescription").text(d.description);
     })
 </script>
 <div id="queryOneAlbumForm" align="center">

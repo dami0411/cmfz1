@@ -11,7 +11,7 @@
     var groubQueryOne;
     $(function(){
         $('#queryAlbumTreegrid').treegrid({
-            url:"${pageContext.request.contextPath}/album/queryAllAlbum",
+            url:"${pageContext.request.contextPath}/album/queryAllAlbumSplit",
             idField:'id',
             treeField:'title',
             fitColumns:true,
@@ -22,8 +22,8 @@
             pageNumber:1,
             onDblClickRow:function(row){
                var mySelect = $("#queryAlbumTreegrid").datagrid("getSelected");
-               var bb = $("#queryAlbumTreegrid").treegrid("getParent",mySelect.id);
-                if(bb!=null){
+               var bb = $("#queryAlbumTreegrid").treegrid("getLevel",mySelect.id);
+                if(bb==2){
                     var a = $("<video id='videoOpen' width='500px'><source src='${pageContext.request.contextPath}"+row.url+"' type='video/mp4' id='mySource'></video>");
                     $("#d1").append(a);
                     var oVideo = $("#videoOpen");
@@ -31,7 +31,7 @@
                     document.getElementById("videoOpen").play();
                     $.get("${pageContext.request.contextPath}/chapter/changeTimes?id="+row.id);
                 }else{
-                    $.messager.alert('我的消息','请选择专辑所在行！','info');
+                    $.messager.alert('我的消息','请选择章节所在行！','info');
                 }
 
             },
@@ -52,18 +52,28 @@
             closed:true,
             cache:false,
             modal:true,
-            href:"${pageContext.request.contextPath}/main/album/queryOneAlbum.jsp"
         })
 
         $("#albumDetail").linkbutton({
+
             onClick:function(){
                 var mySelect = $("#queryAlbumTreegrid").datagrid("getSelected");
-                groubQueryOne = mySelect.id;
-                if(mySelect!=null){
-                    $("#albumDetailDialog").dialog("open");
+                if(mySelect==null){
+                    $.messager.alert('我的消息','请选择一个专辑节点！','info');
                 }else{
-                    $.messager.alert('我的消息','请选择一个！','info');
+                    var d = $("#queryAlbumTreegrid").treegrid("getLevel",mySelect.id);
+                    if(d==1){
+                        $("#albumDetailDialog").dialog("open");
+                        $("#albumDetailTable").empty();
+                        var queryOne = $("<tr><td>作者:  </td><td>"+mySelect.author+"</td></tr><tr><td>播音:  </td><td>"+mySelect.brodecast+"</td></tr><tr><td>描述:  </td><td>"+mySelect.description+"</td></tr><tr><td>封面:  </td><td><img src='${pageContext.request.contextPath}/"+mySelect.coverImg+"' width='100' height='150'></td></tr>")
+                        $("#albumDetailTable").append(queryOne);
+                    }else{
+                        $.messager.alert('我的消息','请选择专辑节点！','info');
+                    }
                 }
+
+
+                //console.log(mySelect);
             }
         });
         //初始化添加专辑按钮
@@ -94,15 +104,20 @@
             }
         });
         $("#addChapter").linkbutton({
+
             onClick:function(){
                 var mySelect = $("#queryAlbumTreegrid").datagrid("getSelected");
-                if(mySelect!=null){
-                    $("#addChapterDialog").dialog("open");
-                    groubId =mySelect.id;
-                }else{
-                    $.messager.alert('我的消息','请选择你要添加的章节！','info');
+                if(mySelect==null){
+                    $.messager.alert('我的消息','请选择一个专辑节点！','info');
+                }else {
+                    var level = $("#queryAlbumTreegrid").treegrid("getLevel", mySelect.id);
+                    if (level == 1){
+                        $("#addChapterDialog").dialog("open");
+                        groubId = mySelect.id;
+                    } else {
+                        $.messager.alert('我的消息', '请选择你要添加的专辑！', 'info');
+                    }
                 }
-
             }
         });
 
@@ -110,12 +125,12 @@
         $("#downloadAudio").linkbutton({
             onClick:function(){
                 var mySelect = $("#queryAlbumTreegrid").datagrid("getSelected");
-                if(mySelect!=null){
+                var ddd = $("#queryAlbumTreegrid").treegrid("getLevel",mySelect.id);
+                if(ddd==2){
                     window.location.href="${pageContext.request.contextPath}/chapter/download?url="+mySelect.url;
                 }else{
                     $.messager.alert('我的消息','请选择你要下载的章节！','info');
                 }
-
             }
         })
         $("#end").linkbutton({
@@ -161,8 +176,14 @@
     <a id="pause">暂停</a>
     <a id="close">关闭</a>
 </div>
-<div id="albumDetailDialog"></div>
+<div id="albumDetailDialog">
+    <table id="albumDetailTable">
+
+    </table>
+</div>
 <div id="addAlbumDialog"></div>
 <div id="addChapterDialog"></div>
 <div id="d1" style="display: block"></div>
-<table id="queryAlbumTreegrid" style="width:1000px;height:500px"></table>
+<table id="queryAlbumTreegrid" style="width:1000px;height:500px">
+
+</table>

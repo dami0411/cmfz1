@@ -27,7 +27,6 @@ public class AlbumController {
 
     @RequestMapping("/queryOneAlbum/{id}")
     public Album queryOneAlbum(@PathVariable("id")String id){
-        System.out.println(albumService.queryOneAlbum(id));
         return albumService.queryOneAlbum(id);
     }
     //

@@ -33,7 +33,6 @@ public class LogAspect {
         User user = (User) session.getAttribute("user");
         Date date = new Date();
         String name = proceedingJoinPoint.getSignature().getName();
-
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = methodSignature.getMethod();
         LogAnnotation annotation = method.getAnnotation(LogAnnotation.class);
@@ -46,7 +45,7 @@ public class LogAspect {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        System.out.println(user.getName()+"在"+date+"操作的方法"+s+"执行结果是"+flag);
+        System.out.println("在"+date+"操作的方法"+s+"执行结果是"+flag);
         return proceed;
 
     }
