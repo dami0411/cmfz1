@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.yym.dao.MenuDao">
+    <resultMap id="myMenu" type="com.baizhi.yym.entity.Menu">
+        <id column="pid" property="id"/>
+        <result column="ptitle" property="title"/>
+        <result column="phref" property="href"/>
+        <result column="piconCls" property="iconCls"/>
+        <collection property="menuList" ofType="com.baizhi.yym.entity.Menu">
+            <id column="id" property="id"/>
+            <result column="title" property="title"/>
+            <result column="href" property="href"/>
+            <result column="iconCls" property="iconCls"/>
+        </collection>
+    </resultMap>
+    <select id="selectAllMenu" resultMap="myMenu">
+        select m1.id,m1.title,m1.href,m1.iconCls,
+        m2.id pid,m2.title ptitle,m2.href phref,m2.iconCls piconCls,m2.parentId
+        from menu m1
+        right join menu m2
+        on m1.parentId = m2.id
+		where m2.parentId =''
+    </select>
+</mapper>

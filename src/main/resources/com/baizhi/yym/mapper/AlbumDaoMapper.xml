@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.yym.dao.AlbumDao">
+    <!-- //添加
+    public void insertAlbum(Album album);
+    //查所有
+    public List<Album> selectAllAlbum();
+    //查一个
+    public Album selectOneAlbum(String id); -->
+    <resultMap id="myAlbum" type="com.baizhi.yym.entity.Album">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="score" property="score"/>
+        <result column="brodecast" property="brodecast"/>
+        <result column="author" property="author"/>
+        <result column="description" property="description"/>
+        <result column="publicTime" property="publicTime"/>
+        <result column="count" property="count"/>
+        <result column="coverImg" property="coverImg"/>
+        <result column="status" property="status"/>
+        <collection property="children" ofType="com.baizhi.yym.entity.Chapter">
+            <id column="cid" property="id"/>
+            <result column="ctitle" property="title"/>
+            <result column="url" property="url"/>
+            <result column="size" property="size"/>
+            <result column="length" property="length"/>
+            <result column="times" property="times"/>
+            <result column="createTime" property="createTime"/>
+        </collection>
+    </resultMap>
+    <select id="selectAllAlbum" resultMap="myAlbum">
+      select a.id,a.title,score,brodecast,author,description,publicTime,count,coverImg,status,
+      c.id cid,c.title ctitle,url,size,length,times,createTime
+      from album a
+	  left join chapter c
+      on a.id=c.albumId
+    </select>
+
+    <select id="selectAllAlbumSplit" resultMap="myAlbum">
+        select a.id,a.title,score,brodecast,author,description,publicTime,count,coverImg,status,
+        c.id cid,c.title ctitle,url,size,length,times,createTime
+        from album a
+        left join chapter c
+        on a.id=c.albumId
+        limit #{start},#{rows}
+    </select>
+
+    <select id="selectCount" resultType="Integer">
+        select count(*)
+        from album a
+        left join chapter c
+        on a.id=c.albumId
+    </select>
+
+    <select id="selectOneAlbum" parameterType="String" resultType="com.baizhi.yym.entity.Album">
+      select id,title,score,brodecast,author,description,
+      publicTime,count,coverImg,status from album
+      where id=#{id}
+    </select>
+    <insert id="insertAlbum" parameterType="com.baizhi.yym.entity.Album">
+      insert into album values
+      (#{id},#{title},#{score},#{brodecast},#{author},#{description},
+      #{publicTime},#{count},#{coverImg},#{status})
+    </insert>
+    <update id="updateAlbum">
+        update album set count=#{count}
+        where id=#{id}
+    </update>
+</mapper>

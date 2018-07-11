@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.yym.dao.BannerDao">
+    <select id="selectAllBanner" resultType="com.baizhi.yym.entity.Banner">
+        select id,picName,picPath,description,status,createTime,url from banner
+    </select>
+    <select id="selectOne" parameterType="String" resultType="com.baizhi.yym.entity.Banner">
+        select id,picName,picPath,description,status,createTime,url from banner where id=#{id}
+    </select>
+    <update id="updateBanner" parameterType="com.baizhi.yym.entity.Banner">
+        update banner set picName=#{picName},picPath=#{picPath},
+        description=#{description},status=#{status},createTime=#{createTime},url=#{url}
+        where id=#{id}
+    </update>
+    <delete id="deleteBanner" parameterType="String">
+        delete from banner where id=#{id}
+    </delete>
+    <insert id="insertBanner" parameterType="com.baizhi.yym.entity.Banner">
+        insert into banner values(#{id},#{picName},#{picPath},#{description},#{status},#{createTime},#{url})
+    </insert>
+
+    <select id="selectAllBannerSplit" resultType="com.baizhi.yym.entity.Banner">
+        select id,picName,picPath,description,status,createTime,url from banner
+        limit #{start},#{rows}
+    </select>
+    <select id="selectCount" resultType="Integer">
+        select count(*) from banner
+    </select>
+</mapper>

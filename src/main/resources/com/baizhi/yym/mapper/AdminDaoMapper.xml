@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.yym.dao.AdminDao">
+    <!--//查一个
+    public Admin selectOneAdmin(String id);
+    //修改
+    public void updateAdmin(Admin admin);
+    //添加
+    public void insertAdmin(Admin admin);-->
+    <select id="selectOneAdmin" resultType="com.baizhi.yym.entity.Admin" parameterType="String">
+        select id,name,password,level from admin where name=#{name}
+    </select>
+
+    <update id="updateAdmin" parameterType="com.baizhi.yym.entity.Admin">
+        update admin set name=#{name},password=#{password},level=#{level} where id=#{id}
+    </update>
+
+    <insert id="insertAdmin" parameterType="com.baizhi.yym.entity.Admin">
+        insert into admin values(#{id},#{name},#{password},#{level})
+    </insert>
+</mapper>
